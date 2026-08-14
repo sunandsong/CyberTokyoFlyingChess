@@ -57,6 +57,7 @@ namespace CyberTokyo.Gameplay
         {
             Clear();
             RenderFloor();
+            RenderDecor();
 
             foreach (var tile in board.Tiles)
             {
@@ -143,6 +144,34 @@ namespace CyberTokyo.Gameplay
                     sr.color = ((col + row) & 1) == 0 ? dark : darker;
                     sr.sortingOrder = -50;
                 }
+            }
+        }
+
+        /// <summary>装饰楼群的落点（方格坐标），环绕棋盘、避开四角建筑和行进臂</summary>
+        private static readonly Vector2[] DecorSpots =
+        {
+            new Vector2(2, -3), new Vector2(8, -4), new Vector2(-4, 4), new Vector2(16, 3),
+            new Vector2(-3, 11), new Vector2(5, 17), new Vector2(12, 17), new Vector2(17, 9),
+        };
+
+        /// <summary>背景霓虹楼群：Resources/Decor 里有多少张就轮着摆。没有素材时静默跳过</summary>
+        private void RenderDecor()
+        {
+            var sprites = Resources.LoadAll<Sprite>("Decor");
+            if (sprites == null || sprites.Length == 0) return;
+
+            var root = new GameObject("Decor");
+            root.transform.SetParent(transform, false);
+
+            for (int i = 0; i < DecorSpots.Length; i++)
+            {
+                var spot = DecorSpots[i];
+                var go = new GameObject($"Decor_{i}");
+                go.transform.SetParent(root.transform, false);
+                go.transform.position = IsoProjection.WorldPosition(spot.x, spot.y);
+                var sr = go.AddComponent<SpriteRenderer>();
+                sr.sprite = sprites[i % sprites.Length];
+                sr.sortingOrder = 100 + (int)(spot.x + spot.y);
             }
         }
 

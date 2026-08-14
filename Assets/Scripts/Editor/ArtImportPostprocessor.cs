@@ -14,7 +14,9 @@ namespace CyberTokyo.Editor
     {
         private void OnPreprocessTexture()
         {
-            if (!assetPath.StartsWith("Assets/Art/Sprites/")) return;
+            // Decor 是运行时 Resources.LoadAll 的装饰楼群，规则同美术目录
+            if (!assetPath.StartsWith("Assets/Art/Sprites/") &&
+                !assetPath.StartsWith("Assets/Resources/Decor/")) return;
 
             var importer = (TextureImporter)assetImporter;
             importer.textureType = TextureImporterType.Sprite;
@@ -50,7 +52,8 @@ namespace CyberTokyo.Editor
         /// </summary>
         private static SpriteAlignment AlignmentFor(string path)
         {
-            if (path.Contains("/Pieces/") || path.Contains("/Buildings/") || path.Contains("/Center/"))
+            if (path.Contains("/Pieces/") || path.Contains("/Buildings/") ||
+                path.Contains("/Center/") || path.Contains("/Decor/"))
             {
                 return SpriteAlignment.BottomCenter;
             }
