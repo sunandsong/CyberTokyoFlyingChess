@@ -17,18 +17,27 @@ namespace CyberTokyo.Gameplay
         private TileView _tilePrefab;
         private SpriteRenderer _cornerBuildingPrefab;
         private CenterGodzillaController _centerPrefab;
-        private TileColorPaletteSO _palette;
+        private BoardVisuals _visuals;
 
-        private readonly Dictionary<int, GameObject> _spawnedTiles = new Dictionary<int, GameObject>();
+        private readonly Dictionary<int, TileView> _spawnedTiles = new Dictionary<int, TileView>();
         private CenterGodzillaController _centerInstance;
 
         public void Initialize(TileView tilePrefab, SpriteRenderer cornerBuildingPrefab,
-            CenterGodzillaController centerPrefab, TileColorPaletteSO palette)
+            CenterGodzillaController centerPrefab, BoardVisuals visuals)
         {
             _tilePrefab = tilePrefab;
             _cornerBuildingPrefab = cornerBuildingPrefab;
             _centerPrefab = centerPrefab;
-            _palette = palette;
+            _visuals = visuals;
+        }
+
+        /// <summary>RewardPlacement 开局后才往 tile 上写奖励，写完调这个刷新格子上的标记</summary>
+        public void RefreshRewardMarkers()
+        {
+            foreach (var tile in _spawnedTiles.Values)
+            {
+                tile.RefreshRewardMarker(_visuals);
+            }
         }
 
         public CenterGodzillaController CenterInstance => _centerInstance;
@@ -56,8 +65,8 @@ namespace CyberTokyo.Gameplay
                 var pos = BoardGeometry.RingPosition(tile.Index);
                 var instance = Instantiate(_tilePrefab, WorldPosition(pos), Quaternion.identity, transform);
                 instance.name = $"Tile_{tile.Index:D2}_{tile.Kind}";
-                instance.Initialize(tile, _palette);
-                _spawnedTiles[tile.Index] = instance.gameObject;
+                instance.Initialize(tile, _visuals);
+                _spawnedTiles[tile.Index] = instance;
             }
 
             foreach (var corner in board.Corners)
@@ -72,12 +81,24 @@ namespace CyberTokyo.Gameplay
 
                 var instance = Instantiate(_cornerBuildingPrefab, worldPos, Quaternion.identity, transform);
                 instance.name = $"Corner_{corner.Slot}_{corner.Building}";
-                instance.transform.localScale = Vector3.one * area.Size;
+
+                var buildingSprite = _visuals.Buildings != null ? _visuals.Buildings.Resolve(corner.Building) : null;
+                if (buildingSprite != null)
+                {
+                    instance.sprite = buildingSprite;
+                    instance.color = Color.white;
+                    // 真建筑图按 art-spec 是 320px/PPU128 = 2.5 单位宽，不再按 3x3 拉伸
+                    instance.transform.localScale = Vector3.one;
+                }
+                else
+                {
+                    instance.transform.localScale = Vector3.one * area.Size;
+                }
             }
 
             _centerInstance = Instantiate(_centerPrefab, WorldPosition(BoardGeometry.BoardCenter), Quaternion.identity, transform);
             _centerInstance.name = "Center_Godzilla";
-            _centerInstance.Initialize(board.Center);
+            _centerInstance.Initialize(board.Center, _visuals.CenterStates);
         }
 
         private static CornerArea FindCornerArea(CornerSlot slot)

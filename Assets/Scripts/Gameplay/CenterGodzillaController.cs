@@ -14,13 +14,17 @@ namespace CyberTokyo.Gameplay
 
         private List<CenterStateDto> _states;
         private int _currentIndex;
+        private CenterStateVisualSO _visuals;
+        private Sprite _placeholderSprite;
 
         public string CurrentStateKey => _states[_currentIndex].Key;
 
-        public void Initialize(CenterConfigDto config)
+        public void Initialize(CenterConfigDto config, CenterStateVisualSO visuals)
         {
             _states = config.States;
             _currentIndex = 0;
+            _visuals = visuals;
+            if (spriteRenderer != null) _placeholderSprite = spriteRenderer.sprite;
             ApplyVisual();
         }
 
@@ -39,7 +43,18 @@ namespace CyberTokyo.Gameplay
         private void ApplyVisual()
         {
             if (spriteRenderer == null) return;
-            spriteRenderer.color = PlaceholderColorFor(CurrentStateKey);
+
+            var sprite = _visuals != null ? _visuals.Resolve(CurrentStateKey) : null;
+            if (sprite != null)
+            {
+                spriteRenderer.sprite = sprite;
+                spriteRenderer.color = Color.white;
+            }
+            else
+            {
+                spriteRenderer.sprite = _placeholderSprite;
+                spriteRenderer.color = PlaceholderColorFor(CurrentStateKey);
+            }
         }
 
         private static Color PlaceholderColorFor(string key)

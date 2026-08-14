@@ -57,6 +57,7 @@ namespace CyberTokyo.Gameplay
             RewardPlacement.ApplyTemporaryPlacement(_gameState.Board, _gameState.Reward, _gameState.Level);
 
             boardRenderer.Render(_gameState.Board);
+            boardRenderer.RefreshRewardMarkers();
             _turnManager = new TurnManager(_gameState);
             _rewardApplier = new RewardApplier(new RewardLedger());
 
@@ -66,18 +67,20 @@ namespace CyberTokyo.Gameplay
             UpdateStatusText();
         }
 
+        private BoardVisuals _visuals;
+
         private bool TryLoadResources()
         {
             var tileGo = Resources.Load<GameObject>("Board/TileView");
             var cornerGo = Resources.Load<GameObject>("Board/CornerBuildingView");
             var centerGo = Resources.Load<GameObject>("Board/CenterView");
             var pieceGo = Resources.Load<GameObject>("Pieces/PieceView");
-            var palette = Resources.Load<TileColorPaletteSO>("Data/TileColorPalette");
+            _visuals = BoardVisuals.LoadFromResources();
 
-            if (tileGo == null || cornerGo == null || centerGo == null || pieceGo == null || palette == null)
+            if (tileGo == null || cornerGo == null || centerGo == null || pieceGo == null || _visuals.Palette == null)
             {
                 Debug.LogError($"[GameLoop] Resources 加载失败: tile={tileGo != null}, corner={cornerGo != null}, " +
-                               $"center={centerGo != null}, piece={pieceGo != null}, palette={palette != null}。" +
+                               $"center={centerGo != null}, piece={pieceGo != null}, palette={_visuals.Palette != null}。" +
                                "确认这些资产都在 Assets/Resources/ 对应子目录下");
                 return false;
             }
@@ -87,7 +90,7 @@ namespace CyberTokyo.Gameplay
                 tileGo.GetComponent<TileView>(),
                 cornerGo.GetComponent<SpriteRenderer>(),
                 centerGo.GetComponent<CenterGodzillaController>(),
-                palette);
+                _visuals);
             return true;
         }
 
@@ -101,6 +104,8 @@ namespace CyberTokyo.Gameplay
                     Quaternion.identity);
                 piece.name = $"Piece_{player.Color}";
                 piece.SetColor(PlaceholderColorFor(player.Color));
+                var pieceSprite = _visuals.Pieces != null ? _visuals.Pieces.Resolve(player.Color) : null;
+                if (pieceSprite != null) piece.SetSprite(pieceSprite);
                 _pieceViews[player.Color] = piece;
             }
         }

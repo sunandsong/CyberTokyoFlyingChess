@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CyberTokyo.Gameplay
 {
-    /// <summary>一枚棋子的占位表现（纯色圆点）与逐格挪动动画。</summary>
+    /// <summary>一枚棋子的表现（有真图用真图，没有就白圈+色心占位）与逐格挪动动画。</summary>
     public class PieceController : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
@@ -13,6 +13,24 @@ namespace CyberTokyo.Gameplay
         public void SetColor(Color color)
         {
             if (spriteRenderer != null) spriteRenderer.color = color;
+        }
+
+        /// <summary>
+        /// 换成真美术：根渲染器直接用图、恢复 1:1 比例（占位圆的 0.6 缩放是给
+        /// 128px 白圆配的，真图按 art-spec 96px 出图自带正确尺寸），色心子节点藏掉。
+        /// </summary>
+        public void SetSprite(Sprite sprite)
+        {
+            if (sprite == null) return;
+
+            var root = GetComponent<SpriteRenderer>();
+            if (root != null)
+            {
+                root.sprite = sprite;
+                root.color = Color.white;
+                transform.localScale = Vector3.one;
+            }
+            if (spriteRenderer != null && spriteRenderer != root) spriteRenderer.enabled = false;
         }
 
         public void SnapTo(Vector3 worldPosition)

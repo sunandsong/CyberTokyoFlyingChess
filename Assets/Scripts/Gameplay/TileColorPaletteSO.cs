@@ -5,9 +5,8 @@ using UnityEngine;
 namespace CyberTokyo.Gameplay
 {
     /// <summary>
-    /// 占位美术：TileColor -&gt; 纯色。Phase 5 真美术接进来后，这里会加一个
-    /// TileColor -&gt; Sprite 的查找表，TileView 从「设置颜色」改成「设置贴图」，
-    /// 但 BoardRenderer 调用它的方式不用变。
+    /// TileColor -&gt; 显示。TileSprite 配了就用图（真美术），没配就退回纯色（占位）——
+    /// 素材可以一类一类地换，不用一次到位。
     /// </summary>
     [CreateAssetMenu(fileName = "TileColorPalette", menuName = "Cyber Tokyo/Tile Color Palette")]
     public class TileColorPaletteSO : ScriptableObject
@@ -17,6 +16,8 @@ namespace CyberTokyo.Gameplay
         {
             public TileColor Color;
             public Color DisplayColor;
+            /// <summary>真美术的格子贴图，按 docs/art-spec.md 的规范出图后拖进来。null = 用纯色</summary>
+            public Sprite TileSprite;
         }
 
         public Entry[] Entries;
@@ -28,6 +29,15 @@ namespace CyberTokyo.Gameplay
                 if (entry.Color == color) return entry.DisplayColor;
             }
             return UnityEngine.Color.magenta; // 没配到 —— 显眼地报错，别悄悄吞掉
+        }
+
+        public Sprite ResolveSprite(TileColor color)
+        {
+            foreach (var entry in Entries)
+            {
+                if (entry.Color == color) return entry.TileSprite;
+            }
+            return null;
         }
     }
 }
