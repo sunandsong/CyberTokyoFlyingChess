@@ -93,17 +93,26 @@ xcrun simctl launch booted com.sunandsong.cybertokyoflyingchess
 - [ ] 音效/音乐（`Assets/Audio/` 空着）
 - [ ] 骰子动画、UI 美化（现在是最朴素的一个按钮一行字）
 
-## 六、出图清单（21 张）
+## 六、素材清单与来源（重要更新）
 
-规范见 `docs/art-spec.md`，提示词见 `docs/art-prompts.md`。生成后放对应文件夹、
-在 `Assets/Resources/Data/` 对应查找表里拖上即生效。
+**设计师的正式素材已经存在**，大部分不需要 AI 出图：
 
-| # | 文件名 | 尺寸 | 放置目录 | 挂载查找表 |
-|---|---|---|---|---|
-| 1-4 | `tile_green/yellow/red/blue.png` | 128×128 | `Assets/Art/Sprites/Board/` | TileColorPalette |
-| 5-8 | `piece_green/yellow/red/blue.png` | 96×96 | `Assets/Art/Sprites/Pieces/` | PieceVisuals |
-| 9-12 | `building_startGate/tokyoTower/sensojiPagoda/luckyCatShrine.png` | 320×320 | `Assets/Art/Sprites/Buildings/` | BuildingVisuals |
-| 13-16 | `center_sleeping/angry/atomicBreath/pleased.png` | 512×512（四张同站位！） | `Assets/Art/Sprites/Center/` | CenterStateVisuals |
-| 17-21 | `reward_coin/banknote/dice/card_shard/mystery.png` | 64×64 | `Assets/Art/Sprites/Reward/` | RewardIcons |
+- `docs/design/0731.../图片和附件/sucai.png`（8844×3144，带透明通道）是**素材总表**：
+  四只动物飞行器棋子、四栋建筑（牌坊/东京塔/浅草寺/招财猫神社）、等距地格、奖励图标全在里面
+- `图层 165 拷贝 3 / 166 / 167 / 168.png` 是哥斯拉四状态的独立透明图 —— **已接入完成**
+  （改名放进 `Art/Sprites/Center/`，Auto-Wire 自动挂表）
 
-建议顺序：先出 1-4（地格）看整体风格 → 13-16（哥斯拉，主视觉）→ 5-8（棋子）→ 9-12（建筑）→ 17-21（图标）。
+**接入方法（已验证跑通）**：素材按 `docs/art-spec.md` 的命名放进 `Assets/Art/Sprites/<类别>/`，
+跑菜单 Tools → Cyber Tokyo → Auto-Wire Art From Sprites（或直接出包，会自动跑），按文件名自动挂进查找表。
+
+| 状态 | 素材 | 文件名 | 放置目录 |
+|---|---|---|---|
+| ✅ 已接入 | 哥斯拉四状态 | `center_sleeping/angry/atomicBreath/pleased.png` | `Center/` |
+| ⬜ 待从 sucai.png 切 | 棋子 ×4 | `piece_green/yellow/red/blue.png` | `Pieces/` |
+| ⬜ 待从 sucai.png 切 | 建筑 ×4 | `building_startGate/tokyoTower/sensojiPagoda/luckyCatShrine.png` | `Buildings/` |
+| ⬜ 待从 sucai.png 切 | 地格 ×4 | `tile_green/yellow/red/blue.png` | `Board/` |
+| ⬜ 待从 sucai.png 切 | 奖励图标 ×5 | `reward_coin/banknote/dice/card_shard/mystery.png` | `Reward/` |
+
+切图注意：sucai.png 的元素排布是不规则的，需要按坐标裁切（macOS 可用 `sips -c` 或 Photoshop/Python PIL）。
+棋子贴纸在表右上区、建筑在最右侧、地格在左上/左中、图标在左中偏下。切出后确认透明背景、
+裁到元素贴边。AI 出图提示词（`docs/art-prompts.md`）仅在需要补设计师没画的素材时才用。
