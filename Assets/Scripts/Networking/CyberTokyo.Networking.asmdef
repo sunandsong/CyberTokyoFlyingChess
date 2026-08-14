@@ -1,10 +1,8 @@
 {
-    "name": "CyberTokyo.Gameplay",
+    "name": "CyberTokyo.Networking",
     "rootNamespace": "",
     "references": [
-        "CyberTokyo.Core",
-        "CyberTokyo.Networking",
-        "UnityEngine.UI"
+        "CyberTokyo.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

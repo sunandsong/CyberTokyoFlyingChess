@@ -4,6 +4,7 @@
     "references": [
         "CyberTokyo.Core",
         "CyberTokyo.Gameplay",
+        "CyberTokyo.Networking",
         "UnityEngine.UI",
         "Unity.InputSystem"
     ],

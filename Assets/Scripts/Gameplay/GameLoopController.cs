@@ -4,6 +4,7 @@ using CyberTokyo.Core;
 using CyberTokyo.Core.Board;
 using CyberTokyo.Core.Reward;
 using CyberTokyo.Core.State;
+using CyberTokyo.Networking;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,13 +37,21 @@ namespace CyberTokyo.Gameplay
         private RewardApplier _rewardApplier;
         private readonly Dictionary<TileColor, PieceController> _pieceViews = new Dictionary<TileColor, PieceController>();
         private bool _isMoving;
+        private LoadedConfig _loadedConfig;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            if (!TryLoadResources()) return;
+            if (!TryLoadResources()) yield break;
 
-            var board = CloneBoard(offlineConfig.Board);
-            var reward = offlineConfig.Reward;
+            // 三级兜底拉配置：网络 → 缓存 → 内置。settings 资产不存在就直接离线模式
+            var settings = Resources.Load<GameServerSettings>("Data/GameServerSettings");
+            yield return ConfigRepository.Load(settings, offlineConfig, loaded => _loadedConfig = loaded);
+
+            Debug.Log($"[GameLoop] config source={_loadedConfig.Source}, " +
+                      $"board v{_loadedConfig.BoardVersion}, reward v{_loadedConfig.RewardVersion}");
+
+            var board = CloneBoard(_loadedConfig.Board);
+            var reward = _loadedConfig.Reward;
 
             _gameState = new GameState(board, reward);
             RewardPlacement.ApplyTemporaryPlacement(_gameState.Board, _gameState.Reward, _gameState.Level);
@@ -189,7 +198,10 @@ namespace CyberTokyo.Gameplay
         {
             if (statusText == null) return;
             var player = _turnManager.CurrentPlayer;
-            statusText.text = $"Turn: {player.Color}  |  Level: {_gameState.Level}";
+            string cfg = _loadedConfig.Source == "builtin"
+                ? "cfg: builtin"
+                : $"cfg: v{_loadedConfig.BoardVersion} ({_loadedConfig.Source})";
+            statusText.text = $"Turn: {player.Color}  |  Level: {_gameState.Level}  |  {cfg}";
         }
 
         private static Color PlaceholderColorFor(TileColor color)
