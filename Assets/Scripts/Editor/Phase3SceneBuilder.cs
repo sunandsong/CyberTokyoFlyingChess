@@ -192,14 +192,24 @@ namespace CyberTokyo.Editor
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(PiecePrefabPath);
             if (existing != null) return existing.GetComponent<PieceController>();
 
+            // 白色底圈 + 内圈填充色：占位棋子和占位格子共用一套纯色，
+            // 没这圈描边的话棋子落到同色格上就隐身了
             var go = new GameObject("PieceView");
-            var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = sprite;
-            sr.sortingOrder = 2;
+            var outline = go.AddComponent<SpriteRenderer>();
+            outline.sprite = sprite;
+            outline.color = Color.white;
+            outline.sortingOrder = 2;
             go.transform.localScale = Vector3.one * 0.6f;
 
+            var fillGo = new GameObject("Fill");
+            fillGo.transform.SetParent(go.transform, false);
+            fillGo.transform.localScale = Vector3.one * 0.72f;
+            var fill = fillGo.AddComponent<SpriteRenderer>();
+            fill.sprite = sprite;
+            fill.sortingOrder = 3;
+
             var controller = go.AddComponent<PieceController>();
-            BindPrivateField(controller, "spriteRenderer", sr);
+            BindPrivateField(controller, "spriteRenderer", fill);
 
             return SaveAndDestroy(go, PiecePrefabPath).GetComponent<PieceController>();
         }
