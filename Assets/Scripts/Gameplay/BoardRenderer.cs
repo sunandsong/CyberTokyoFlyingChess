@@ -64,6 +64,10 @@ namespace CyberTokyo.Gameplay
                 instance.name = $"Tile_{tile.Index:D2}_{tile.Kind}";
                 instance.Initialize(tile, _visuals);
                 instance.SetSortOrder(IsoProjection.SortOrder(pos));
+                if (tile.Kind == TileKind.ConveyorTrigger)
+                {
+                    instance.gameObject.AddComponent<TilePulse>();
+                }
                 _spawnedTiles[tile.Index] = instance;
             }
 

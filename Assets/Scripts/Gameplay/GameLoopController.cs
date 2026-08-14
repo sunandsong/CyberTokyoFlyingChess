@@ -212,12 +212,13 @@ namespace CyberTokyo.Gameplay
 
         private static Color PlaceholderColorFor(TileColor color)
         {
+            // 跟 Phase3SceneBuilder.EnsurePalette 的霓虹色一致
             switch (color)
             {
-                case TileColor.Green: return new Color(0.25f, 0.75f, 0.35f);
-                case TileColor.Yellow: return new Color(0.95f, 0.85f, 0.20f);
-                case TileColor.Red: return new Color(0.85f, 0.25f, 0.25f);
-                case TileColor.Blue: return new Color(0.25f, 0.45f, 0.90f);
+                case TileColor.Green: return new Color(0.21f, 0.95f, 0.65f);
+                case TileColor.Yellow: return new Color(1.00f, 0.88f, 0.25f);
+                case TileColor.Red: return new Color(1.00f, 0.30f, 0.58f);
+                case TileColor.Blue: return new Color(0.28f, 0.62f, 1.00f);
                 default: return Color.white;
             }
         }

@@ -38,7 +38,10 @@ namespace CyberTokyo.Gameplay
             transform.position = worldPosition;
         }
 
-        /// <summary>依次挪到每个 waypoint，每挪到一个就回调一次（用来在中途格触发 OnPass）。</summary>
+        /// <summary>每步的跳跃弧线高度。0 = 退回平移</summary>
+        [SerializeField] private float hopHeight = 0.22f;
+
+        /// <summary>依次跳到每个 waypoint（抛物线小跳），每落一格回调一次（用来在中途格触发 OnPass）。</summary>
         public IEnumerator StepAlong(IReadOnlyList<Vector3> waypoints, float stepDuration, Action<int> onStepLanded)
         {
             for (int i = 0; i < waypoints.Count; i++)
@@ -49,7 +52,10 @@ namespace CyberTokyo.Gameplay
                 while (t < 1f)
                 {
                     t += Time.deltaTime / stepDuration;
-                    transform.position = Vector3.Lerp(start, end, Mathf.Clamp01(t));
+                    float clamped = Mathf.Clamp01(t);
+                    Vector3 pos = Vector3.Lerp(start, end, clamped);
+                    pos.y += hopHeight * Mathf.Sin(clamped * Mathf.PI);
+                    transform.position = pos;
                     yield return null;
                 }
                 transform.position = end;

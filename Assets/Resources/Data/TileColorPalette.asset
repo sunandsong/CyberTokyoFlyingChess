@@ -14,10 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: CyberTokyo.Gameplay::CyberTokyo.Gameplay.TileColorPaletteSO
   Entries:
   - Color: 0
-    DisplayColor: {r: 0.25, g: 0.75, b: 0.35, a: 1}
+    DisplayColor: {r: 0.21, g: 0.95, b: 0.65, a: 1}
+    TileSprite: {fileID: 0}
   - Color: 1
-    DisplayColor: {r: 0.95, g: 0.85, b: 0.2, a: 1}
+    DisplayColor: {r: 1, g: 0.88, b: 0.25, a: 1}
+    TileSprite: {fileID: 0}
   - Color: 2
-    DisplayColor: {r: 0.85, g: 0.25, b: 0.25, a: 1}
+    DisplayColor: {r: 1, g: 0.3, b: 0.58, a: 1}
+    TileSprite: {fileID: 0}
   - Color: 3
-    DisplayColor: {r: 0.25, g: 0.45, b: 0.9, a: 1}
+    DisplayColor: {r: 0.28, g: 0.62, b: 1, a: 1}
+    TileSprite: {fileID: 0}

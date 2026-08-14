@@ -11,11 +11,14 @@ namespace CyberTokyo.Gameplay
     public class CenterGodzillaController : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer spriteRenderer;
+        /// <summary>atomicBreath 状态的喷吐粒子，builder 在 prefab 里配好绑进来</summary>
+        [SerializeField] private ParticleSystem breathParticles;
 
         private List<CenterStateDto> _states;
         private int _currentIndex;
         private CenterStateVisualSO _visuals;
         private Sprite _placeholderSprite;
+        private Color _stateBaseColor = Color.white;
 
         public string CurrentStateKey => _states[_currentIndex].Key;
 
@@ -48,23 +51,49 @@ namespace CyberTokyo.Gameplay
             if (sprite != null)
             {
                 spriteRenderer.sprite = sprite;
-                spriteRenderer.color = Color.white;
+                _stateBaseColor = Color.white;
             }
             else
             {
                 spriteRenderer.sprite = _placeholderSprite;
-                spriteRenderer.color = PlaceholderColorFor(CurrentStateKey);
+                _stateBaseColor = PlaceholderColorFor(CurrentStateKey);
             }
+            spriteRenderer.color = _stateBaseColor;
+
+            if (breathParticles != null)
+            {
+                if (CurrentStateKey == "atomicBreath") breathParticles.Play();
+                else breathParticles.Stop();
+            }
+        }
+
+        /// <summary>激动状态（angry/atomicBreath）时亮度脉冲，配合 Bloom 泛光</summary>
+        private void Update()
+        {
+            if (spriteRenderer == null || _states == null) return;
+            bool agitated = CurrentStateKey == "angry" || CurrentStateKey == "atomicBreath";
+            if (!agitated)
+            {
+                spriteRenderer.color = _stateBaseColor;
+                return;
+            }
+
+            float k = 1f + 0.25f * Mathf.Sin(Time.time * 5f);
+            spriteRenderer.color = new Color(
+                Mathf.Min(1f, _stateBaseColor.r * k),
+                Mathf.Min(1f, _stateBaseColor.g * k),
+                Mathf.Min(1f, _stateBaseColor.b * k),
+                _stateBaseColor.a);
         }
 
         private static Color PlaceholderColorFor(string key)
         {
             switch (key)
             {
-                case "sleeping": return new Color(0.30f, 0.30f, 0.42f);
-                case "angry": return new Color(0.80f, 0.20f, 0.20f);
-                case "atomicBreath": return new Color(0.95f, 0.90f, 0.20f);
-                case "pleased": return new Color(0.30f, 0.80f, 0.45f);
+                case "sleeping": return new Color(0.32f, 0.32f, 0.48f);
+                case "angry": return new Color(1.00f, 0.28f, 0.35f);
+                case "atomicBreath": return new Color(1.00f, 0.95f, 0.35f);
+                case "pleased": return new Color(0.25f, 0.95f, 0.60f);
                 default: return Color.gray;
             }
         }

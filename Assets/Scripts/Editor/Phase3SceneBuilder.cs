@@ -7,6 +7,8 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -149,13 +151,15 @@ namespace CyberTokyo.Editor
             var existing = AssetDatabase.LoadAssetAtPath<TileColorPaletteSO>(PalettePath);
             if (existing != null) return existing;
 
+            // 霓虹版占位色：通道顶到接近 1，Bloom 阈值 0.9 时亮部会泛光，
+            // 配深色背景出赛博夜景感。参考 demo 的 #ff4d94 / #35e6c4 一族
             var palette = ScriptableObject.CreateInstance<TileColorPaletteSO>();
             palette.Entries = new[]
             {
-                new TileColorPaletteSO.Entry { Color = TileColor.Green, DisplayColor = new Color(0.25f, 0.75f, 0.35f) },
-                new TileColorPaletteSO.Entry { Color = TileColor.Yellow, DisplayColor = new Color(0.95f, 0.85f, 0.20f) },
-                new TileColorPaletteSO.Entry { Color = TileColor.Red, DisplayColor = new Color(0.85f, 0.25f, 0.25f) },
-                new TileColorPaletteSO.Entry { Color = TileColor.Blue, DisplayColor = new Color(0.25f, 0.45f, 0.90f) },
+                new TileColorPaletteSO.Entry { Color = TileColor.Green, DisplayColor = new Color(0.21f, 0.95f, 0.65f) },
+                new TileColorPaletteSO.Entry { Color = TileColor.Yellow, DisplayColor = new Color(1.00f, 0.88f, 0.25f) },
+                new TileColorPaletteSO.Entry { Color = TileColor.Red, DisplayColor = new Color(1.00f, 0.30f, 0.58f) },
+                new TileColorPaletteSO.Entry { Color = TileColor.Blue, DisplayColor = new Color(0.28f, 0.62f, 1.00f) },
             };
 
             AssetDatabase.CreateAsset(palette, PalettePath);
@@ -209,8 +213,61 @@ namespace CyberTokyo.Editor
 
             var controller = go.AddComponent<CenterGodzillaController>();
             BindPrivateField(controller, "spriteRenderer", sr);
+            BindPrivateField(controller, "breathParticles", CreateBreathParticles(go.transform));
 
             return SaveAndDestroy(go, CenterPrefabPath).GetComponent<CenterGodzillaController>();
+        }
+
+        /// <summary>atomicBreath 的喷吐粒子：橙黄色小圆片向上喷。默认停着，控制器按状态开关</summary>
+        private static ParticleSystem CreateBreathParticles(Transform parent)
+        {
+            var go = new GameObject("BreathFX");
+            go.transform.SetParent(parent, false);
+            // 父物体被拉成 1.5x2，抵消掉，粒子别跟着变形
+            go.transform.localScale = new Vector3(1f / 1.5f, 1f / 2f, 1f);
+            go.transform.localPosition = new Vector3(0f, 0.35f, 0f);
+
+            var ps = go.AddComponent<ParticleSystem>();
+            var main = ps.main;
+            main.playOnAwake = false;
+            main.loop = true;
+            main.startLifetime = 0.7f;
+            main.startSpeed = 3.5f;
+            main.startSize = new ParticleSystem.MinMaxCurve(0.08f, 0.2f);
+            main.startColor = new ParticleSystem.MinMaxGradient(
+                new Color(1f, 0.85f, 0.25f), new Color(1f, 0.45f, 0.15f));
+            main.maxParticles = 200;
+            main.simulationSpace = ParticleSystemSimulationSpace.World;
+
+            var emission = ps.emission;
+            emission.rateOverTime = 70f;
+
+            var shape = ps.shape;
+            shape.shapeType = ParticleSystemShapeType.Cone;
+            shape.angle = 18f;
+            shape.radius = 0.06f;
+            // 锥口朝上（默认沿 +Z 喷，转成 +Y）
+            shape.rotation = new Vector3(-90f, 0f, 0f);
+
+            var renderer = go.GetComponent<ParticleSystemRenderer>();
+            renderer.material = EnsureParticleMaterial();
+            renderer.sortingOrder = 150;
+
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            return ps;
+        }
+
+        private static Material EnsureParticleMaterial()
+        {
+            const string path = "Assets/Art/Materials/BreathParticle.mat";
+            var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (existing != null) return existing;
+
+            var circle = AssetDatabase.LoadAssetAtPath<Texture2D>(CircleSpritePath);
+            var material = new Material(Shader.Find("Sprites/Default")) { mainTexture = circle };
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            AssetDatabase.CreateAsset(material, path);
+            return material;
         }
 
         private static PieceController EnsurePiecePrefab(Sprite sprite)
@@ -302,8 +359,15 @@ namespace CyberTokyo.Editor
             camera.orthographic = true;
             camera.orthographicSize = 8f; // 初值而已，CameraFitter 每帧按宽高比修正
             camera.transform.position = new Vector3(0f, 0f, -10f);
-            camera.backgroundColor = new Color(0.08f, 0.08f, 0.10f);
+            // 更深的夜色底，霓虹色才压得出来
+            camera.backgroundColor = new Color(0.045f, 0.04f, 0.09f);
             cameraGo.AddComponent<CameraFitter>();
+
+            var cameraData = cameraGo.GetComponent<UniversalAdditionalCameraData>();
+            if (cameraData == null) cameraData = cameraGo.AddComponent<UniversalAdditionalCameraData>();
+            cameraData.renderPostProcessing = true;
+
+            CreatePostFxVolume();
 
             // BoardRenderer 的 prefab/palette 依赖不在这里绑 —— 运行时 Resources.Load，
             // 原因见类头注释
@@ -340,6 +404,43 @@ namespace CyberTokyo.Editor
 
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
             EditorSceneManager.SaveScene(scene, ScenePath);
+        }
+
+        /// <summary>
+        /// 全局后处理：Bloom（霓虹泛光，阈值 0.9 只抓亮部）+ 暗角 + 轻微提饱和。
+        /// Profile 资产落在 Assets/Settings/ 下复用；Volume 对它的引用是引擎类型资产，
+        /// 场景序列化能存住（那个坑只咬 Gameplay 程序集的类型）。
+        /// </summary>
+        private static void CreatePostFxVolume()
+        {
+            const string profilePath = "Assets/Settings/GamePostFX.asset";
+
+            var profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(profilePath);
+            if (profile == null)
+            {
+                profile = ScriptableObject.CreateInstance<VolumeProfile>();
+                AssetDatabase.CreateAsset(profile, profilePath);
+
+                var bloom = profile.Add<Bloom>();
+                bloom.intensity.Override(1.1f);
+                bloom.threshold.Override(0.9f);
+                bloom.scatter.Override(0.6f);
+
+                var vignette = profile.Add<Vignette>();
+                vignette.intensity.Override(0.28f);
+                vignette.smoothness.Override(0.45f);
+
+                var colors = profile.Add<ColorAdjustments>();
+                colors.saturation.Override(12f);
+                colors.contrast.Override(8f);
+
+                AssetDatabase.SaveAssets();
+            }
+
+            var volumeGo = new GameObject("PostFX");
+            var volume = volumeGo.AddComponent<Volume>();
+            volume.isGlobal = true;
+            volume.sharedProfile = profile;
         }
 
         private static Button CreateButton(Transform parent, string name, string label, Font font, Vector2 anchor)
