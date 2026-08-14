@@ -1,15 +1,11 @@
 {
-    "name": "CyberTokyo.Editor",
+    "name": "CyberTokyo.Gameplay",
     "rootNamespace": "",
     "references": [
         "CyberTokyo.Core",
-        "CyberTokyo.Gameplay",
-        "UnityEngine.UI",
-        "Unity.InputSystem"
+        "UnityEngine.UI"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
