@@ -1,0 +1,450 @@
+{
+    "board": {
+        "version": 1,
+        "data": {
+            "form": "form1",
+            "corners": [
+                {
+                    "slot": "bottomRight",
+                    "building": "startGate"
+                },
+                {
+                    "slot": "topRight",
+                    "building": "tokyoTower"
+                },
+                {
+                    "slot": "topLeft",
+                    "building": "sensojiPagoda"
+                },
+                {
+                    "slot": "bottomLeft",
+                    "building": "luckyCatShrine"
+                }
+            ],
+            "center": {
+                "states": [
+                    {
+                        "key": "sleeping",
+                        "assetId": null
+                    },
+                    {
+                        "key": "angry",
+                        "assetId": null
+                    },
+                    {
+                        "key": "atomicBreath",
+                        "assetId": null
+                    },
+                    {
+                        "key": "pleased",
+                        "assetId": null
+                    }
+                ]
+            },
+            "tiles": [
+                {
+                    "index": 0,
+                    "kind": "corner_building",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 1,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 2,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 3,
+                    "kind": "conveyor_trigger",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 4,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 5,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 6,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 7,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 8,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 9,
+                    "kind": "free_teleport",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 10,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 11,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 12,
+                    "kind": "corner_building",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 13,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 14,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 15,
+                    "kind": "conveyor_trigger",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 16,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 17,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 18,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 19,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 20,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 21,
+                    "kind": "free_teleport",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 22,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 23,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 24,
+                    "kind": "corner_building",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 25,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 26,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 27,
+                    "kind": "conveyor_trigger",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 28,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 29,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 30,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 31,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 32,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 33,
+                    "kind": "free_teleport",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 34,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 35,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 36,
+                    "kind": "corner_building",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 37,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 38,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 39,
+                    "kind": "conveyor_trigger",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 40,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 41,
+                    "kind": "normal",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 42,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 43,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                },
+                {
+                    "index": 44,
+                    "kind": "normal",
+                    "colors": [
+                        "green"
+                    ]
+                },
+                {
+                    "index": 45,
+                    "kind": "free_teleport",
+                    "colors": [
+                        "yellow"
+                    ]
+                },
+                {
+                    "index": 46,
+                    "kind": "normal",
+                    "colors": [
+                        "red"
+                    ]
+                },
+                {
+                    "index": 47,
+                    "kind": "normal",
+                    "colors": [
+                        "blue"
+                    ]
+                }
+            ],
+            "conveyors": [
+                {
+                    "color": "green",
+                    "triggerTileIndex": 3,
+                    "length": 4
+                },
+                {
+                    "color": "blue",
+                    "triggerTileIndex": 15,
+                    "length": 4
+                },
+                {
+                    "color": "red",
+                    "triggerTileIndex": 27,
+                    "length": 4
+                },
+                {
+                    "color": "yellow",
+                    "triggerTileIndex": 39,
+                    "length": 4
+                }
+            ]
+        }
+    },
+    "reward": {
+        "version": 1,
+        "data": {
+            "valueScale": {
+                "base": 1,
+                "perLevel": 0.5
+            },
+            "density": {
+                "base": 6,
+                "perLevel": 2
+            },
+            "pool": [
+                {
+                    "kind": "coin",
+                    "weight": 60,
+                    "unlockLevel": 1
+                },
+                {
+                    "kind": "dice",
+                    "weight": 15,
+                    "unlockLevel": 1
+                },
+                {
+                    "kind": "card_shard",
+                    "weight": 15,
+                    "unlockLevel": 1
+                },
+                {
+                    "kind": "mystery",
+                    "weight": 10,
+                    "unlockLevel": 1
+                },
+                {
+                    "kind": "banknote",
+                    "weight": 30,
+                    "unlockLevel": 5
+                }
+            ],
+            "conveyorEndReward": {
+                "kind": "dice",
+                "amount": 1
+            }
+        }
+    }
+}

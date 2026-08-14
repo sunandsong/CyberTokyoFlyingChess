@@ -1,0 +1,507 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f0bff9d0a76e4c3e9de5aa03a640dab, type: 3}
+  m_Name: DefaultGameConfig
+  m_EditorClassIdentifier: CyberTokyo.Core::CyberTokyo.Core.DefaultGameConfigAsset
+  Board:
+    Form: form1
+    Tiles:
+    - Index: 0
+      Kind: 1
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 1
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 2
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 3
+      Kind: 2
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 4
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 5
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 6
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 7
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 8
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 9
+      Kind: 3
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 10
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 11
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 12
+      Kind: 1
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 13
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 14
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 15
+      Kind: 2
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 16
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 17
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 18
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 19
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 20
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 21
+      Kind: 3
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 22
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 23
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 24
+      Kind: 1
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 25
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 26
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 27
+      Kind: 2
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 28
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 29
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 30
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 31
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 32
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 33
+      Kind: 3
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 34
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 35
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 36
+      Kind: 1
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 37
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 38
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 39
+      Kind: 2
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 40
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 41
+      Kind: 0
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 42
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 43
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 44
+      Kind: 0
+      Colors: 00000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 45
+      Kind: 3
+      Colors: 01000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 46
+      Kind: 0
+      Colors: 02000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    - Index: 47
+      Kind: 0
+      Colors: 03000000
+      OnPass:
+        Kind: 0
+        Amount: 0
+      OnLand:
+        Kind: 0
+        Amount: 0
+    Conveyors:
+    - Color: 0
+      TriggerTileIndex: 3
+      Length: 4
+    - Color: 3
+      TriggerTileIndex: 15
+      Length: 4
+    - Color: 2
+      TriggerTileIndex: 27
+      Length: 4
+    - Color: 1
+      TriggerTileIndex: 39
+      Length: 4
+    Corners:
+    - Slot: 2
+      Building: 0
+    - Slot: 1
+      Building: 1
+    - Slot: 0
+      Building: 2
+    - Slot: 3
+      Building: 3
+    Center:
+      States:
+      - Key: sleeping
+        AssetId: 
+      - Key: angry
+        AssetId: 
+      - Key: atomicBreath
+        AssetId: 
+      - Key: pleased
+        AssetId: 
+  Reward:
+    ValueScale:
+      Base: 1
+      PerLevel: 0.5
+    Density:
+      Base: 6
+      PerLevel: 2
+    Pool:
+    - Kind: 0
+      Weight: 60
+      UnlockLevel: 1
+    - Kind: 2
+      Weight: 15
+      UnlockLevel: 1
+    - Kind: 3
+      Weight: 15
+      UnlockLevel: 1
+    - Kind: 4
+      Weight: 10
+      UnlockLevel: 1
+    - Kind: 1
+      Weight: 30
+      UnlockLevel: 5
+    ConveyorEndReward:
+      Kind: 2
+      Amount: 1
