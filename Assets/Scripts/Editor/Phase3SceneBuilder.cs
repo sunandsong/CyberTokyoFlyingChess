@@ -273,9 +273,10 @@ namespace CyberTokyo.Editor
             var cameraGo = GameObject.Find("Main Camera");
             var camera = cameraGo.GetComponent<Camera>();
             camera.orthographic = true;
-            camera.orthographicSize = 8f;
+            camera.orthographicSize = 8f; // 初值而已，CameraFitter 每帧按宽高比修正
             camera.transform.position = new Vector3(0f, 0f, -10f);
             camera.backgroundColor = new Color(0.08f, 0.08f, 0.10f);
+            cameraGo.AddComponent<CameraFitter>();
 
             // BoardRenderer 的 prefab/palette 依赖不在这里绑 —— 运行时 Resources.Load，
             // 原因见类头注释
