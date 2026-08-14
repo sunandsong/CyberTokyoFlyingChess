@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: CyberTokyo.Gameplay::CyberTokyo.Gameplay.BuildingVisualSO
   Entries:
   - Building: 0
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: b5ff48cb7420f42a894e06e5a4d7bbe1, type: 3}
   - Building: 1
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 3cbc86d353e87426b879c27e1603074e, type: 3}
   - Building: 2
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 4f5517664f74846789bf87b686d8a581, type: 3}
   - Building: 3
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 740bb6877f65b4dcdae1bf8ff6683751, type: 3}

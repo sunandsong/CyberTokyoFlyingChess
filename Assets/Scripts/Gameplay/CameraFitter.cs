@@ -10,8 +10,8 @@ namespace CyberTokyo.Gameplay
     [RequireComponent(typeof(Camera))]
     public class CameraFitter : MonoBehaviour
     {
-        /// <summary>需要装下的横向半宽：13/2 + 半格余量</summary>
-        [SerializeField] private float halfBoardWidth = 7f;
+        /// <summary>需要装下的横向半宽：13/2 + 一点余量</summary>
+        [SerializeField] private float halfBoardWidth = 6.7f;
         /// <summary>宽屏下的纵向半高下限（棋盘 13 格高 + 上下 UI 呼吸空间）</summary>
         [SerializeField] private float minHalfHeight = 8f;
 

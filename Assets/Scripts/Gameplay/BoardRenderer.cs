@@ -56,6 +56,7 @@ namespace CyberTokyo.Gameplay
         public void Render(BoardConfigDto board)
         {
             Clear();
+            RenderFloor();
 
             foreach (var tile in board.Tiles)
             {
@@ -76,10 +77,9 @@ namespace CyberTokyo.Gameplay
                 var area = FindCornerArea(corner.Slot);
                 float centerCol = area.Col + (area.Size - 1) / 2f;
                 float centerRow = area.Row + (area.Size - 1) / 2f;
-                // 立着的建筑：脚站在角落地块中心，向上抬半个身位
-                var worldPos = IsoProjection.WorldPosition(centerCol, centerRow) + new Vector3(0f, 0.9f, 0f);
+                var ground = IsoProjection.WorldPosition(centerCol, centerRow);
 
-                var instance = Instantiate(_cornerBuildingPrefab, worldPos, Quaternion.identity, transform);
+                var instance = Instantiate(_cornerBuildingPrefab, ground, Quaternion.identity, transform);
                 instance.name = $"Corner_{corner.Slot}_{corner.Building}";
                 // 立起物统一排在所有地格之上，彼此间按纵深排
                 instance.sortingOrder = 100 + (int)(centerCol + centerRow);
@@ -87,13 +87,18 @@ namespace CyberTokyo.Gameplay
                 var buildingSprite = _visuals.Buildings != null ? _visuals.Buildings.Resolve(corner.Building) : null;
                 if (buildingSprite != null)
                 {
+                    // 真图自带等距底座、底边中点锚点：图的底边就是底座最前角，
+                    // 落在 3x3 区域的前角位置
                     instance.sprite = buildingSprite;
                     instance.color = Color.white;
                     instance.transform.localScale = Vector3.one;
+                    instance.transform.position = ground + new Vector3(0f, -0.75f, 0f);
                 }
                 else
                 {
+                    // 占位灰块是居中锚点，抬半个身位站在区域中心
                     instance.transform.localScale = new Vector3(1.6f, 2.2f, 1f);
+                    instance.transform.position = ground + new Vector3(0f, 0.9f, 0f);
                 }
             }
 
@@ -103,6 +108,34 @@ namespace CyberTokyo.Gameplay
                 Quaternion.identity, transform);
             _centerInstance.name = "Center_Godzilla";
             _centerInstance.Initialize(board.Center, _visuals.CenterStates);
+        }
+
+        /// <summary>
+        /// 棋盘四周铺一圈暗色地砖网格：竖屏手机上棋盘只占屏幕中段，纯黑背景显得
+        /// 又空又小，铺上夜色街区地面之后棋盘是"城市里的一块场地"而不是悬在虚空里。
+        /// </summary>
+        private void RenderFloor()
+        {
+            var sprite = _tilePrefab.GetComponent<SpriteRenderer>().sprite;
+            var dark = new Color(0.085f, 0.085f, 0.135f);
+            var darker = new Color(0.068f, 0.068f, 0.112f);
+
+            var root = new GameObject("Floor");
+            root.transform.SetParent(transform, false);
+
+            for (int col = -4; col <= BoardGeometry.RingSide + 3; col++)
+            {
+                for (int row = -4; row <= BoardGeometry.RingSide + 3; row++)
+                {
+                    var go = new GameObject($"F_{col}_{row}");
+                    go.transform.SetParent(root.transform, false);
+                    go.transform.position = IsoProjection.WorldPosition(col, row);
+                    var sr = go.AddComponent<SpriteRenderer>();
+                    sr.sprite = sprite;
+                    sr.color = ((col + row) & 1) == 0 ? dark : darker;
+                    sr.sortingOrder = -50;
+                }
+            }
         }
 
         private static CornerArea FindCornerArea(CornerSlot slot)
