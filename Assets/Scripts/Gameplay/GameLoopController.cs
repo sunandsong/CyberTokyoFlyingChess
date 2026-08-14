@@ -25,6 +25,7 @@ namespace CyberTokyo.Gameplay
         [SerializeField] private DiceController diceController;
         [SerializeField] private Button rollButton;
         [SerializeField] private Text statusText;
+        [SerializeField] private Text rewardsText;
 
         [SerializeField] private float stepDuration = 0.18f;
 
@@ -63,8 +64,26 @@ namespace CyberTokyo.Gameplay
 
             SpawnPieces();
 
+            _cameraFollow = FindFirstObjectByType<CameraFollow>();
+            UpdateCameraTarget();
+
             if (rollButton != null) rollButton.onClick.AddListener(OnRollButtonClicked);
             UpdateStatusText();
+        }
+
+        private CameraFollow _cameraFollow;
+
+        private void SetRollButtonLabel(string label)
+        {
+            if (rollButton == null) return;
+            var text = rollButton.GetComponentInChildren<Text>();
+            if (text != null) text.text = label;
+        }
+
+        private void UpdateCameraTarget()
+        {
+            if (_cameraFollow == null) return;
+            _cameraFollow.SetTarget(_pieceViews[_turnManager.CurrentPlayer.Color].transform);
         }
 
         private BoardVisuals _visuals;
@@ -136,6 +155,7 @@ namespace CyberTokyo.Gameplay
 
             var player = _turnManager.CurrentPlayer;
             int roll = diceController.Roll();
+            SetRollButtonLabel($"🎲 {roll}");
             var piece = _pieceViews[player.Color];
             var offset = PieceOffset(_gameState.Players.IndexOf(player));
 
@@ -177,7 +197,9 @@ namespace CyberTokyo.Gameplay
             Debug.Log($"[GameLoop] {player.Color} rolled {roll}, landed on tile {player.RingIndex} ({landedTile.Kind})");
 
             _turnManager.NextTurn();
+            UpdateCameraTarget();
             UpdateStatusText();
+            SetRollButtonLabel("Roll Dice");
             _isMoving = false;
         }
 
@@ -202,12 +224,25 @@ namespace CyberTokyo.Gameplay
 
         private void UpdateStatusText()
         {
-            if (statusText == null) return;
-            var player = _turnManager.CurrentPlayer;
-            string cfg = _loadedConfig.Source == "builtin"
-                ? "cfg: builtin"
-                : $"cfg: v{_loadedConfig.BoardVersion} ({_loadedConfig.Source})";
-            statusText.text = $"Turn: {player.Color}  |  Level: {_gameState.Level}  |  {cfg}";
+            if (statusText != null)
+            {
+                var player = _turnManager.CurrentPlayer;
+                string cfg = _loadedConfig.Source == "builtin"
+                    ? "cfg: builtin"
+                    : $"cfg: v{_loadedConfig.BoardVersion} ({_loadedConfig.Source})";
+                statusText.text = $"Turn: {player.Color}  |  Level: {_gameState.Level}  |  {cfg}";
+            }
+
+            if (rewardsText != null)
+            {
+                var parts = new List<string>(_gameState.Players.Count);
+                foreach (var p in _gameState.Players)
+                {
+                    p.RewardTotals.TryGetValue(RewardKind.Coin, out int coins);
+                    parts.Add($"{p.Color.ToString()[0]}:{coins}");
+                }
+                rewardsText.text = $"Coins   {string.Join("   ", parts)}";
+            }
         }
 
         private static Color PlaceholderColorFor(TileColor color)

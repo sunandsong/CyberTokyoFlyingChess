@@ -10,10 +10,11 @@ namespace CyberTokyo.Gameplay
     [RequireComponent(typeof(Camera))]
     public class CameraFitter : MonoBehaviour
     {
-        /// <summary>需要装下的横向半宽：13/2 + 一点余量</summary>
-        [SerializeField] private float halfBoardWidth = 6.7f;
-        /// <summary>宽屏下的纵向半高下限（棋盘 13 格高 + 上下 UI 呼吸空间）</summary>
-        [SerializeField] private float minHalfHeight = 8f;
+        /// <summary>可见横向半宽。刻意小于棋盘半宽（6.5）—— 镜头拉近跟着棋子走
+        /// （见 CameraFollow），不再追求一屏装下整张棋盘</summary>
+        [SerializeField] private float halfBoardWidth = 3.7f;
+        /// <summary>宽屏（编辑器）下的纵向半高下限</summary>
+        [SerializeField] private float minHalfHeight = 5f;
 
         private Camera _camera;
         private float _lastAspect;

@@ -123,13 +123,21 @@ namespace CyberTokyo.Gameplay
             var root = new GameObject("Floor");
             root.transform.SetParent(transform, false);
 
-            for (int col = -4; col <= BoardGeometry.RingSide + 3; col++)
+            // 覆盖"镜头跟随移动时可能看到的最大范围"：竖屏视野半高 ~8.5 + 跟随
+            // 纵向偏移，加余量取 iso y ∈ [-11, 11]、x ∈ [-8, 8]，按等距坐标反推
+            // 网格范围再逐格过滤，别整片方阵全生成（会多出几千个没人看见的格子）
+            const float maxX = 8f;
+            const float maxY = 11f;
+            for (int col = -34; col <= BoardGeometry.RingSide + 33; col++)
             {
-                for (int row = -4; row <= BoardGeometry.RingSide + 3; row++)
+                for (int row = -34; row <= BoardGeometry.RingSide + 33; row++)
                 {
+                    var pos = IsoProjection.WorldPosition(col, row);
+                    if (Mathf.Abs(pos.x) > maxX || Mathf.Abs(pos.y) > maxY) continue;
+
                     var go = new GameObject($"F_{col}_{row}");
                     go.transform.SetParent(root.transform, false);
-                    go.transform.position = IsoProjection.WorldPosition(col, row);
+                    go.transform.position = pos;
                     var sr = go.AddComponent<SpriteRenderer>();
                     sr.sprite = sprite;
                     sr.color = ((col + row) & 1) == 0 ? dark : darker;

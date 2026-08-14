@@ -362,6 +362,7 @@ namespace CyberTokyo.Editor
             // 更深的夜色底，霓虹色才压得出来
             camera.backgroundColor = new Color(0.045f, 0.04f, 0.09f);
             cameraGo.AddComponent<CameraFitter>();
+            cameraGo.AddComponent<CameraFollow>();
 
             var cameraData = cameraGo.GetComponent<UniversalAdditionalCameraData>();
             if (cameraData == null) cameraData = cameraGo.AddComponent<UniversalAdditionalCameraData>();
@@ -389,8 +390,10 @@ namespace CyberTokyo.Editor
             var font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             if (font == null) font = Resources.GetBuiltinResource<Font>("Arial.ttf");
 
-            var rollButton = CreateButton(canvasGo.transform, "RollButton", "Roll Dice", font, new Vector2(0.5f, 0.08f));
-            var statusText = CreateText(canvasGo.transform, "StatusText", "Turn: -", font, new Vector2(0.5f, 0.92f));
+            var rollButton = CreateButton(canvasGo.transform, "RollButton", "Roll Dice", font, new Vector2(0.5f, 0.09f));
+            // 顶部往下让出灵动岛/刘海的位置
+            var statusText = CreateText(canvasGo.transform, "StatusText", "Turn: -", font, new Vector2(0.5f, 0.915f));
+            var rewardsText = CreateText(canvasGo.transform, "RewardsText", "Coins   G:0   Y:0   R:0   B:0", font, new Vector2(0.5f, 0.872f));
 
             var offlineConfig = AssetDatabase.LoadAssetAtPath<DefaultGameConfigAsset>(DefaultConfigPath);
 
@@ -401,6 +404,7 @@ namespace CyberTokyo.Editor
             BindPrivateField(gameLoop, "diceController", dice);
             BindPrivateField(gameLoop, "rollButton", rollButton);
             BindPrivateField(gameLoop, "statusText", statusText);
+            BindPrivateField(gameLoop, "rewardsText", rewardsText);
 
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
             EditorSceneManager.SaveScene(scene, ScenePath);
@@ -450,7 +454,7 @@ namespace CyberTokyo.Editor
             var rect = go.GetComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = anchor;
             rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = new Vector2(280, 100);
+            rect.sizeDelta = new Vector2(380, 130);
             rect.anchoredPosition = Vector2.zero;
 
             var image = go.GetComponent<Image>();
