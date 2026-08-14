@@ -40,4 +40,4 @@ Assets/
 | OPEN-5 | 四角建筑踩上去的效果 |
 | OPEN-6 | 胜利条件 / 一局怎么算结束 |
 
-完整方案见 `/Users/zhangsong/.claude/plans/giggly-brewing-hummingbird.md`。
+**接手本项目请先读 `docs/HANDOFF.md`** —— 开发全过程、关键决策与坑、构建命令、待办与出图清单都在那里。
