@@ -110,10 +110,11 @@ namespace CyberTokyo.Gameplay
             }
         }
 
-        /// <summary>四个棋子按象限微错位，叠在同一格时也能看清都有谁</summary>
+        /// <summary>四个棋子按象限微错位，叠在同一格时也能看清都有谁。
+        /// 等距菱形格半高只有 0.25，偏移量要比正方格时代收紧</summary>
         private static Vector3 PieceOffset(int playerIndex)
         {
-            const float d = 0.18f;
+            const float d = 0.11f;
             switch (playerIndex % 4)
             {
                 case 0: return new Vector3(-d, d, 0);

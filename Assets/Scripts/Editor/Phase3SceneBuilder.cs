@@ -29,6 +29,7 @@ namespace CyberTokyo.Editor
     {
         private const string SquareSpritePath = "Assets/Art/Sprites/UI/placeholder_square.png";
         private const string CircleSpritePath = "Assets/Art/Sprites/UI/placeholder_circle.png";
+        private const string DiamondSpritePath = "Assets/Art/Sprites/UI/placeholder_diamond.png";
         private const string PalettePath = "Assets/Resources/Data/TileColorPalette.asset";
         private const string TilePrefabPath = "Assets/Resources/Board/TileView.prefab";
         private const string CornerPrefabPath = "Assets/Resources/Board/CornerBuildingView.prefab";
@@ -42,9 +43,10 @@ namespace CyberTokyo.Editor
         {
             var squareSprite = EnsureSprite(SquareSpritePath, MakeSquareTexture());
             var circleSprite = EnsureSprite(CircleSpritePath, MakeCircleTexture());
+            var diamondSprite = EnsureSprite(DiamondSpritePath, MakeDiamondTexture());
             EnsurePalette();
 
-            EnsureTilePrefab(squareSprite);
+            EnsureTilePrefab(diamondSprite);
             EnsureCornerPrefab(squareSprite);
             EnsureCenterPrefab(squareSprite);
             EnsurePiecePrefab(circleSprite);
@@ -66,6 +68,29 @@ namespace CyberTokyo.Editor
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
             var pixels = new Color32[size * size];
             for (int i = 0; i < pixels.Length; i++) pixels[i] = new Color32(255, 255, 255, 255);
+            tex.SetPixels32(pixels);
+            tex.Apply();
+            return tex;
+        }
+
+        /// <summary>等距地格的 2:1 菱形（128x64），白色，靠 SpriteRenderer.color 上色</summary>
+        private static Texture2D MakeDiamondTexture()
+        {
+            const int w = 128;
+            const int h = 64;
+            var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+            var pixels = new Color32[w * h];
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    // |x/半宽| + |y/半高| <= 1 即菱形内
+                    float nx = Mathf.Abs(x + 0.5f - w / 2f) / (w / 2f);
+                    float ny = Mathf.Abs(y + 0.5f - h / 2f) / (h / 2f);
+                    byte alpha = nx + ny <= 1f ? (byte)255 : (byte)0;
+                    pixels[y * w + x] = new Color32(255, 255, 255, alpha);
+                }
+            }
             tex.SetPixels32(pixels);
             tex.Apply();
             return tex;
@@ -178,8 +203,9 @@ namespace CyberTokyo.Editor
             var go = new GameObject("CenterView");
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = sprite;
-            sr.sortingOrder = 1;
-            go.transform.localScale = Vector3.one * 1.4f;
+            // 立起物层：100 + 纵深(中心 6+6=12)
+            sr.sortingOrder = 112;
+            go.transform.localScale = new Vector3(1.5f, 2f, 1f);
 
             var controller = go.AddComponent<CenterGodzillaController>();
             BindPrivateField(controller, "spriteRenderer", sr);
@@ -198,7 +224,8 @@ namespace CyberTokyo.Editor
             var outline = go.AddComponent<SpriteRenderer>();
             outline.sprite = sprite;
             outline.color = Color.white;
-            outline.sortingOrder = 2;
+            // 棋子永远压在地格和立起物之上（体积小，偶尔穿插可接受）
+            outline.sortingOrder = 200;
             go.transform.localScale = Vector3.one * 0.6f;
 
             var fillGo = new GameObject("Fill");
@@ -206,7 +233,7 @@ namespace CyberTokyo.Editor
             fillGo.transform.localScale = Vector3.one * 0.72f;
             var fill = fillGo.AddComponent<SpriteRenderer>();
             fill.sprite = sprite;
-            fill.sortingOrder = 3;
+            fill.sortingOrder = 201;
 
             var controller = go.AddComponent<PieceController>();
             BindPrivateField(controller, "spriteRenderer", fill);

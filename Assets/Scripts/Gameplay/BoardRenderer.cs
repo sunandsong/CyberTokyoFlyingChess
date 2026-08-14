@@ -42,13 +42,10 @@ namespace CyberTokyo.Gameplay
 
         public CenterGodzillaController CenterInstance => _centerInstance;
 
-        /// <summary>格子坐标 -&gt; 世界坐标。中心格落在世界原点</summary>
+        /// <summary>格子坐标 -&gt; 世界坐标（等距投影，见 IsoProjection）</summary>
         public static Vector3 WorldPosition(GridPos pos)
         {
-            return new Vector3(
-                pos.Col - BoardGeometry.BoardCenter.Col,
-                -(pos.Row - BoardGeometry.BoardCenter.Row),
-                0f);
+            return IsoProjection.WorldPosition(pos);
         }
 
         public Vector3 WorldPositionForRingIndex(int ringIndex)
@@ -66,6 +63,7 @@ namespace CyberTokyo.Gameplay
                 var instance = Instantiate(_tilePrefab, WorldPosition(pos), Quaternion.identity, transform);
                 instance.name = $"Tile_{tile.Index:D2}_{tile.Kind}";
                 instance.Initialize(tile, _visuals);
+                instance.SetSortOrder(IsoProjection.SortOrder(pos));
                 _spawnedTiles[tile.Index] = instance;
             }
 
@@ -74,29 +72,30 @@ namespace CyberTokyo.Gameplay
                 var area = FindCornerArea(corner.Slot);
                 float centerCol = area.Col + (area.Size - 1) / 2f;
                 float centerRow = area.Row + (area.Size - 1) / 2f;
-                var worldPos = new Vector3(
-                    centerCol - BoardGeometry.BoardCenter.Col,
-                    -(centerRow - BoardGeometry.BoardCenter.Row),
-                    0f);
+                // 立着的建筑：脚站在角落地块中心，向上抬半个身位
+                var worldPos = IsoProjection.WorldPosition(centerCol, centerRow) + new Vector3(0f, 0.9f, 0f);
 
                 var instance = Instantiate(_cornerBuildingPrefab, worldPos, Quaternion.identity, transform);
                 instance.name = $"Corner_{corner.Slot}_{corner.Building}";
+                // 立起物统一排在所有地格之上，彼此间按纵深排
+                instance.sortingOrder = 100 + (int)(centerCol + centerRow);
 
                 var buildingSprite = _visuals.Buildings != null ? _visuals.Buildings.Resolve(corner.Building) : null;
                 if (buildingSprite != null)
                 {
                     instance.sprite = buildingSprite;
                     instance.color = Color.white;
-                    // 真建筑图按 art-spec 是 320px/PPU128 = 2.5 单位宽，不再按 3x3 拉伸
                     instance.transform.localScale = Vector3.one;
                 }
                 else
                 {
-                    instance.transform.localScale = Vector3.one * area.Size;
+                    instance.transform.localScale = new Vector3(1.6f, 2.2f, 1f);
                 }
             }
 
-            _centerInstance = Instantiate(_centerPrefab, WorldPosition(BoardGeometry.BoardCenter), Quaternion.identity, transform);
+            _centerInstance = Instantiate(_centerPrefab,
+                WorldPosition(BoardGeometry.BoardCenter) + new Vector3(0f, 0.8f, 0f),
+                Quaternion.identity, transform);
             _centerInstance.name = "Center_Godzilla";
             _centerInstance.Initialize(board.Center, _visuals.CenterStates);
         }

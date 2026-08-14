@@ -17,6 +17,13 @@ namespace CyberTokyo.Gameplay
 
         private SpriteRenderer _rewardMarker;
 
+        /// <summary>等距视角的画家排序：靠近观察者的格子后画。奖励标记跟着 +1</summary>
+        public void SetSortOrder(int order)
+        {
+            if (spriteRenderer != null) spriteRenderer.sortingOrder = order;
+            if (_rewardMarker != null) _rewardMarker.sortingOrder = order + 1;
+        }
+
         public void Initialize(TileConfigDto tile, BoardVisuals visuals)
         {
             Tile = tile;
