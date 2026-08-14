@@ -33,10 +33,15 @@ namespace CyberTokyo.Editor
             importer.SetTextureSettings(settings);
         }
 
-        /// <summary>Reward 图标是 UI 尺度（64px/100ppu），其余全部 128 —— 1 格 = 1 世界单位</summary>
+        /// <summary>
+        /// Reward 图标是 UI 尺度（64px/100ppu）；Center 的哥斯拉素材实图约 500px 宽，
+        /// 按 256ppu 折成 ~2 世界单位，正好占住十字中心区；其余 128 —— 1 格 = 1 世界单位。
+        /// </summary>
         private static float PixelsPerUnitFor(string path)
         {
-            return path.Contains("/Reward/") ? 100f : 128f;
+            if (path.Contains("/Reward/")) return 100f;
+            if (path.Contains("/Center/")) return 256f;
+            return 128f;
         }
 
         /// <summary>

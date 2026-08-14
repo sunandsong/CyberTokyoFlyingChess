@@ -97,8 +97,9 @@ namespace CyberTokyo.Gameplay
                 }
             }
 
+            // 落在地面位置，抬升与否由控制器按占位/真图自行决定
             _centerInstance = Instantiate(_centerPrefab,
-                WorldPosition(BoardGeometry.BoardCenter) + new Vector3(0f, 0.8f, 0f),
+                WorldPosition(BoardGeometry.BoardCenter),
                 Quaternion.identity, transform);
             _centerInstance.name = "Center_Godzilla";
             _centerInstance.Initialize(board.Center, _visuals.CenterStates);

@@ -73,6 +73,8 @@ namespace CyberTokyo.Editor
             // 场景是 Phase3SceneBuilder 的生成物，出包前重建一次，保证场景装配
             // 逻辑的改动（如新挂组件）不会因为忘了手动重跑菜单而漏进包里
             Phase3SceneBuilder.Build();
+            // 新落进 Art/Sprites 的素材自动挂表，出包永远带上最新已有的图
+            ArtVisualsTool.AutoWire();
 
             Configure();
             TargetSimulator();

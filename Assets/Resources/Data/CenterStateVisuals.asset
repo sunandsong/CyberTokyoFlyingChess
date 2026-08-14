@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: CyberTokyo.Gameplay::CyberTokyo.Gameplay.CenterStateVisualSO
   Entries:
   - StateKey: sleeping
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: a340a4827c3734e48880d71f71699c17, type: 3}
   - StateKey: angry
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 101c0577b12454b4386494c75f21d0bc, type: 3}
   - StateKey: atomicBreath
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: eedc2e973d5e6459480236e4e4d93ece, type: 3}
   - StateKey: pleased
-    Sprite: {fileID: 0}
+    Sprite: {fileID: 21300000, guid: 1e376e710879546d9a02d24f6c6ae103, type: 3}

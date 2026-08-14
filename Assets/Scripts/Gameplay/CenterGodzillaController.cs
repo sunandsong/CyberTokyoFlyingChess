@@ -19,6 +19,8 @@ namespace CyberTokyo.Gameplay
         private CenterStateVisualSO _visuals;
         private Sprite _placeholderSprite;
         private Color _stateBaseColor = Color.white;
+        private Vector3 _groundPosition;
+        private Vector3 _placeholderScale;
 
         public string CurrentStateKey => _states[_currentIndex].Key;
 
@@ -28,6 +30,10 @@ namespace CyberTokyo.Gameplay
             _currentIndex = 0;
             _visuals = visuals;
             if (spriteRenderer != null) _placeholderSprite = spriteRenderer.sprite;
+            // 记住脚下位置和占位块的拉伸比例：真图（底边中点锚点、1:1 比例）和
+            // 占位块（居中锚点、1.5x2 拉伸、上抬半身）的摆法不同，按当前用的是哪种切换
+            _groundPosition = transform.position;
+            _placeholderScale = transform.localScale;
             ApplyVisual();
         }
 
@@ -52,11 +58,15 @@ namespace CyberTokyo.Gameplay
             {
                 spriteRenderer.sprite = sprite;
                 _stateBaseColor = Color.white;
+                transform.localScale = Vector3.one;
+                transform.position = _groundPosition;
             }
             else
             {
                 spriteRenderer.sprite = _placeholderSprite;
                 _stateBaseColor = PlaceholderColorFor(CurrentStateKey);
+                transform.localScale = _placeholderScale;
+                transform.position = _groundPosition + new Vector3(0f, 0.8f, 0f);
             }
             spriteRenderer.color = _stateBaseColor;
 

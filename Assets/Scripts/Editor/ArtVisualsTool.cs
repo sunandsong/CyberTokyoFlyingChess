@@ -22,6 +22,77 @@ namespace CyberTokyo.Editor
             Debug.Log("[ArtVisualsTool] 美术查找表就绪（Assets/Resources/Data/），条目已预填，等着拖图");
         }
 
+        /// <summary>
+        /// 按 art-spec 的命名约定自动把 Assets/Art/Sprites/ 下的图挂进查找表：
+        /// center_&lt;key&gt; / tile_&lt;color&gt; / piece_&lt;color&gt; / building_&lt;id&gt; / reward_&lt;kind&gt;。
+        /// 找不到的条目保持原样（继续用占位），可反复跑。
+        /// </summary>
+        [MenuItem("Tools/Cyber Tokyo/Auto-Wire Art From Sprites")]
+        public static void AutoWire()
+        {
+            int wired = 0;
+
+            var center = AssetDatabase.LoadAssetAtPath<CenterStateVisualSO>("Assets/Resources/Data/CenterStateVisuals.asset");
+            if (center != null)
+            {
+                for (int i = 0; i < center.Entries.Length; i++)
+                {
+                    var sprite = LoadSprite($"Assets/Art/Sprites/Center/center_{center.Entries[i].StateKey}.png");
+                    if (sprite != null) { center.Entries[i].Sprite = sprite; wired++; }
+                }
+                EditorUtility.SetDirty(center);
+            }
+
+            var palette = AssetDatabase.LoadAssetAtPath<TileColorPaletteSO>("Assets/Resources/Data/TileColorPalette.asset");
+            if (palette != null)
+            {
+                for (int i = 0; i < palette.Entries.Length; i++)
+                {
+                    var sprite = LoadSprite($"Assets/Art/Sprites/Board/tile_{palette.Entries[i].Color.ToWire()}.png");
+                    if (sprite != null) { palette.Entries[i].TileSprite = sprite; wired++; }
+                }
+                EditorUtility.SetDirty(palette);
+            }
+
+            var pieces = AssetDatabase.LoadAssetAtPath<PieceVisualSO>("Assets/Resources/Data/PieceVisuals.asset");
+            if (pieces != null)
+            {
+                for (int i = 0; i < pieces.Entries.Length; i++)
+                {
+                    var sprite = LoadSprite($"Assets/Art/Sprites/Pieces/piece_{pieces.Entries[i].Color.ToWire()}.png");
+                    if (sprite != null) { pieces.Entries[i].Sprite = sprite; wired++; }
+                }
+                EditorUtility.SetDirty(pieces);
+            }
+
+            var buildings = AssetDatabase.LoadAssetAtPath<BuildingVisualSO>("Assets/Resources/Data/BuildingVisuals.asset");
+            if (buildings != null)
+            {
+                for (int i = 0; i < buildings.Entries.Length; i++)
+                {
+                    var sprite = LoadSprite($"Assets/Art/Sprites/Buildings/building_{buildings.Entries[i].Building.ToWire()}.png");
+                    if (sprite != null) { buildings.Entries[i].Sprite = sprite; wired++; }
+                }
+                EditorUtility.SetDirty(buildings);
+            }
+
+            var rewards = AssetDatabase.LoadAssetAtPath<RewardIconSO>("Assets/Resources/Data/RewardIcons.asset");
+            if (rewards != null)
+            {
+                for (int i = 0; i < rewards.Entries.Length; i++)
+                {
+                    var sprite = LoadSprite($"Assets/Art/Sprites/Reward/reward_{rewards.Entries[i].Kind.ToWire()}.png");
+                    if (sprite != null) { rewards.Entries[i].Sprite = sprite; wired++; }
+                }
+                EditorUtility.SetDirty(rewards);
+            }
+
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[ArtVisualsTool] Auto-wire 完成，挂上 {wired} 张图");
+        }
+
+        private static Sprite LoadSprite(string path) => AssetDatabase.LoadAssetAtPath<Sprite>(path);
+
         private static void EnsureBuildingVisuals()
         {
             const string path = "Assets/Resources/Data/BuildingVisuals.asset";
