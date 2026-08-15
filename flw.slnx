@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Project Path="CyberTokyo.Core.csproj" />
+  <Project Path="CyberTokyo.Gameplay.csproj" />
+  <Project Path="CyberTokyo.Networking.csproj" />
+  <Project Path="CyberTokyo.Editor.csproj" />
+  <Project Path="CyberTokyo.Tests.EditMode.csproj" />
+</Solution>
