@@ -12,6 +12,9 @@ namespace CyberTokyo.Gameplay
         [SerializeField] private float smoothTime = 0.35f;
         [SerializeField] private Vector2 clampX = new Vector2(-3.4f, 3.4f);
         [SerializeField] private Vector2 clampY = new Vector2(-2.2f, 2.6f);
+        /// <summary>棋子在屏幕上的纵向锚点偏移——抬高这个值把棋盘往屏幕黄金分割线
+        /// （上 38.2%）附近推，而不是让它贴着画面正中或偏下</summary>
+        [SerializeField] private float screenAnchorBiasY = 1.15f;
 
         private Transform _target;
         private Vector3 _velocity;
@@ -23,7 +26,7 @@ namespace CyberTokyo.Gameplay
             if (_target == null) return;
             var goal = new Vector3(
                 Mathf.Clamp(_target.position.x, clampX.x, clampX.y),
-                Mathf.Clamp(_target.position.y + 0.4f, clampY.x, clampY.y),
+                Mathf.Clamp(_target.position.y + screenAnchorBiasY, clampY.x, clampY.y),
                 transform.position.z);
             transform.position = Vector3.SmoothDamp(transform.position, goal, ref _velocity, smoothTime);
         }

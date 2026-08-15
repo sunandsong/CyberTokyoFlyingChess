@@ -12,9 +12,12 @@ namespace CyberTokyo.Gameplay
     {
         /// <summary>可见横向半宽。刻意小于棋盘半宽（6.5）—— 镜头拉近跟着棋子走
         /// （见 CameraFollow），不再追求一屏装下整张棋盘</summary>
-        [SerializeField] private float halfBoardWidth = 3.7f;
+        [SerializeField] private float halfBoardWidth = 2.6f;
         /// <summary>宽屏（编辑器）下的纵向半高下限</summary>
-        [SerializeField] private float minHalfHeight = 5f;
+        [SerializeField] private float minHalfHeight = 4.2f;
+        /// <summary>窄屏（手机竖屏）下的纵向半高上限（安全网，正常不触发——一旦
+        /// 触发就意味着横向会被顶到比 halfBoardWidth 还窄，建筑被裁边）</summary>
+        [SerializeField] private float maxHalfHeight = 6f;
 
         private Camera _camera;
         private float _lastAspect;
@@ -34,7 +37,7 @@ namespace CyberTokyo.Gameplay
         private void Fit()
         {
             _lastAspect = _camera.aspect;
-            _camera.orthographicSize = Mathf.Max(minHalfHeight, halfBoardWidth / _camera.aspect);
+            _camera.orthographicSize = Mathf.Clamp(halfBoardWidth / _camera.aspect, minHalfHeight, maxHalfHeight);
         }
     }
 }

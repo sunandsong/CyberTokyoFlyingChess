@@ -11,7 +11,13 @@ namespace CyberTokyo.Gameplay
     public static class IsoProjection
     {
         public const float TileWidth = 1f;
-        public const float TileHeight = 0.5f;
+        // ponytail: 视角校准旋钮。美术（建筑/装饰楼）的等距底座实测约 1:0.6~0.65
+        // （量法：底座菱形高/宽，如 tokyoTower 330px 宽、侧角到前角约 100px 半高），
+        // 不是教科书 2:1。棋盘格是程序画的，角度迁就美术——对不齐就先调这个值
+        public const float TileHeight = 0.62f;
+        /// <summary>占位地格贴图是按 2:1（128x64）画的，投影角度改了之后要在 y 上
+        /// 拉伸这个倍数才能铺满格子不留缝</summary>
+        public const float TileArtStretchY = TileHeight / 0.5f;
 
         public static Vector3 WorldPosition(float col, float row)
         {
